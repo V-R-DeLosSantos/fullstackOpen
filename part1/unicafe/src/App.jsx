@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
 const Statistics = (props) => {
-  return(
+  
+  if (props.good === 0 && props.neutral === 0 && props.bad === 0) {
+    return <p>No feedback given</p>; 
+  }
+  return (
     <div>
       <p>good {props.good}</p>
       <p>neutral {props.neutral}</p>
@@ -10,8 +14,8 @@ const Statistics = (props) => {
       <p>average {props.average.toFixed(2)}</p>
       <p>positive {props.positive.toFixed(2)}%</p>
     </div>
-  )
-}
+  );
+};
 
 const App = () => {
   // guarda los clics de cada botón en su propio estado
