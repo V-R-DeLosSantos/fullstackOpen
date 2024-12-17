@@ -1,5 +1,21 @@
 import { useState } from 'react';
 
+const Button = ({ text, onClick }) => {
+  return (
+    <button onClick={onClick}>
+      {text}
+    </button>
+  );
+};
+
+const StatisticLine = ({ text, value }) => {
+  return (
+    <p>
+      {text} {value}
+    </p>
+  );
+};
+
 const Statistics = (props) => {
   
   if (props.good === 0 && props.neutral === 0 && props.bad === 0) {
@@ -7,18 +23,18 @@ const Statistics = (props) => {
   }
   return (
     <div>
-      <p>good {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad {props.bad}</p>
-      <p>all {props.total}</p>
-      <p>average {props.average.toFixed(2)}</p>
-      <p>positive {props.positive.toFixed(2)}%</p>
+      <StatisticLine text="good" value={props.good} />
+      <StatisticLine text="neutral" value={props.neutral} />
+      <StatisticLine text="bad" value={props.bad} />
+      <StatisticLine text="all" value={props.total} />
+      <StatisticLine text="average" value={props.average.toFixed(2)} />
+      <StatisticLine text="positive" value={`${props.positive.toFixed(2)}%`} />
     </div>
   );
 };
 
 const App = () => {
-  // guarda los clics de cada botón en su propio estado
+  
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
@@ -33,22 +49,19 @@ const App = () => {
     setBad(bad + 1);
   };
 
-  // Calcula el total de comentarios
   const total = good + neutral + bad;
 
-  // Calcula la puntuación promedio
   const average = total > 0 ? (good - bad) / total : 0;
 
-  // Calcula el porcentaje de comentarios positivos
   const positive = total > 0 ? (good / total) * 100 : 0;
 
   return (
     <div>
       <h1>give feedback</h1>
       
-      <button onClick={handleClickGood}>good</button>
-      <button onClick={handleClickNeutral}>neutral</button>
-      <button onClick={handleClickBad}>bad</button>
+      <Button text="good" onClick={handleClickGood} />
+      <Button text="neutral" onClick={handleClickNeutral} />
+      <Button text="bad" onClick={handleClickBad} />
 
       <h1>statistics </h1>
 
