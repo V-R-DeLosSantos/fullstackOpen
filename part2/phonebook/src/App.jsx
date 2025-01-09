@@ -3,9 +3,12 @@ import Person from './components/Person'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas',
+      number: '040-1234567',
+     }
   ]) 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState ('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -17,13 +20,19 @@ const App = () => {
     
     const personObject = {
       name: newName,
+      number: newNumber,
     }
     setPersons(persons.concat(personObject))
     setNewName('')
+    setNewNumber('')
   }
 
-  const handleChange = (event) => {
+  const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
   }
 
   const personsToShow = persons
@@ -36,7 +45,13 @@ const App = () => {
         <div>
           name: <input 
             value={newName}
-            onChange={handleChange}
+            onChange={handleNameChange}
+          />
+        </div>
+        <div>
+          nummber: <input
+            value={newNumber}
+            onChange={handleNumberChange}  
           />
         </div>
         <div>
