@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import Person from './components/Person';
+import { useState } from 'react'
+import Person from './components/Person'
+import PersonForm from './components/PersonForm'
+import Search from './components/Search'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -11,81 +13,65 @@ const App = () => {
   
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
+  const [searchTerm, setSearchTerm] = useState('');
 
   const addPerson = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+      alert(`${newName} is already added to phonebook`)
+      return
     }
     
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1 // Generar un ID único
-    };
+      id: persons.length + 1 
+    }
     
     setPersons(persons.concat(personObject));
-    setNewName('');
-    setNewNumber('');
-  };
+    setNewName('')
+    setNewNumber('')
+  }
 
   const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  };
+    setNewName(event.target.value)
+  }
 
   const handleNumberChange = (event) => {
-    setNewNumber(event.target.value);
-  };
+    setNewNumber(event.target.value)
+  }
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // Actualizar el término de búsqueda
-  };
+    setSearchTerm(event.target.value)
+  }
 
-  // Filtrar las personas según el término de búsqueda
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  )
 
   return (
     <>
       <div>
         <h2>Phonebook</h2>
-        <div>
-          filter shown with: <input
-            value={searchTerm} 
-            onChange={handleSearchChange}
-          />
-        </div>
-        <h2>add a new</h2>
-        <form onSubmit={addPerson}>
-          <div>
-            name: <input 
-              value={newName}
-              onChange={handleNameChange}
-            />
-          </div>
-          <div>
-            number: <input 
-              value={newNumber}
-              onChange={handleNumberChange}  
-            />
-          </div>
-          <div>
-            <button type="submit">add</button>
-          </div>
-        </form>
-        <h2>Numbers</h2>
+        <Search searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
+        <h3>add a new</h3>
+        <PersonForm 
+          newName={newName} 
+          newNumber={newNumber} 
+          handleNameChange={handleNameChange} 
+          handleNumberChange={handleNumberChange} 
+          addPerson={addPerson} 
+        />
+        <h3>Numbers</h3>
         <div>
           {personsToShow.map(person =>
-            <Person key={person.id} person={person}/> // Usar el ID como clave
+            <Person key={person.id} person={person} />
           )}
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App
