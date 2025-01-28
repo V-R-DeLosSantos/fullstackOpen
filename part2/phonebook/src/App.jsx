@@ -3,6 +3,7 @@ import axios from 'axios'
 import Person from './components/Person'
 import PersonForm from './components/PersonForm'
 import Search from './components/Search'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,18 +11,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
 
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
-  }
-  useEffect(hook, [])
-
-  console.log('render', persons.length, 'persons')
+  },[])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -36,14 +32,13 @@ const App = () => {
       number: newNumber, 
     }
     
-    axios
-    .post('http://localhost:3001/persons', personObject)
-    .then(response => {
-      setPersons(persons.concat(personObject));
-      setNewName('')
-      setNewNumber('')
-
-    })
+    personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   } 
 
   const handleNameChange = (event) => {
@@ -77,8 +72,11 @@ const App = () => {
         />
         <h3>Numbers</h3>
         <div>
-          {personsToShow.map(person =>
-            <Person key={person.id} person={person} />
+          {personsToShow.map((person, i) =>
+            <Person
+             key={i}
+             person={person}
+             />
           )}
         </div>
       </div>
