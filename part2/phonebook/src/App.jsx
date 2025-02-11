@@ -22,8 +22,25 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const existingPerson = persons.find(person => person.name === newName)
+    
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const updatedPerson = { ...existingPerson, number: newNumber }
+        
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => 
+              person.id !== existingPerson.id ? person : returnedPerson
+            ))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            console.error('Error', error)
+          })
+      }
       return
     }
     
@@ -39,7 +56,10 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-  } 
+      .catch(error => {
+        console.error('Error', error)
+      })
+  }
 
   const removePerson = id => {
     const person = persons.find(n => n.id === id)
@@ -53,6 +73,7 @@ const App = () => {
         })
         .catch(error => {
           console.error('Error', error)
+          personService.getAll().then(setPersons)
         })
 
     }
@@ -89,12 +110,12 @@ const App = () => {
         />
         <h3>Numbers</h3>
         <div>
-          {personsToShow.map((person, i) =>
-            <Person
-             key={i}
-             person={person}
-             removePerson={() => removePerson(person.id)}
-             />
+        {personsToShow.map(person =>
+          <Person
+            key={person.id}  // <- Usar id en lugar del índice
+            person={person}
+            removePerson={() => removePerson(person.id)}
+            />
           )}
         </div>
       </div>
