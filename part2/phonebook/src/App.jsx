@@ -41,7 +41,9 @@ const App = () => {
             setTimeout(() => setMessage(null), 5000)
           })
           .catch(error => {
-            console.error('Error', error)
+            setMessage(`Error: ${error.response.data.error || 'Failed to update person'}`)
+            setTimeout(() => setMessage(null), 5000)
+            setPersons(persons.filter(n => existingPerson.id !== id))
           })
       }
       return
@@ -62,7 +64,8 @@ const App = () => {
         setTimeout(() => setMessage(null), 5000)
       })
       .catch(error => {
-        console.error('Error', error)
+        setMessage(`Error: ${error.response.data.error || 'Failed to add person'}`)
+        setTimeout(() => setMessage(null), 5000)
       })
   }
 
@@ -75,9 +78,12 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+          setMessage(`Deleted ${person.name}`)
+          setTimeout(() => setMessage(null), 5000)
         })
         .catch(error => {
-          console.error('Error', error)
+          setMessage(`Error: Failed to delete ${person.name}`)
+          setTimeout(() => setMessage(null), 5000)
           personService.getAll().then(setPersons)
         })
 
@@ -106,7 +112,7 @@ const App = () => {
         <h2>Phonebook</h2>
         <Search searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
         <h3>add a new</h3>
-        <Notification message={message} />
+        <Notification message={message} isError={message.includes('Error')} />
         <PersonForm 
           newName={newName} 
           newNumber={newNumber} 
