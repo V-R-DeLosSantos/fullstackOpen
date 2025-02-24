@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Person from './components/Person'
 import PersonForm from './components/PersonForm'
 import Search from './components/Search'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -10,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     personService
@@ -36,6 +37,8 @@ const App = () => {
             ))
             setNewName('')
             setNewNumber('')
+            setMessage(`Updated ${returnedPerson.name}'s number`)
+            setTimeout(() => setMessage(null), 5000)
           })
           .catch(error => {
             console.error('Error', error)
@@ -55,6 +58,8 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setMessage(`Added ${returnedPerson.name}`)
+        setTimeout(() => setMessage(null), 5000)
       })
       .catch(error => {
         console.error('Error', error)
@@ -101,6 +106,7 @@ const App = () => {
         <h2>Phonebook</h2>
         <Search searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
         <h3>add a new</h3>
+        <Notification message={message} />
         <PersonForm 
           newName={newName} 
           newNumber={newNumber} 
