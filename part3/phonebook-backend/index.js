@@ -30,6 +30,17 @@ app.get('/', (request, response) => {
     response.send('<h1>it should work</h1>')
 })
 
+app.get('/info', (request, response) => {
+  const total = persons.length
+  const today = new Date()
+  const todayString = today.toLocaleString()
+
+  response.send(`
+    <p>Phonebook has info for ${total} people</p>
+    <p>${todayString}</p>
+    `)
+})
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
