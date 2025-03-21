@@ -66,24 +66,24 @@ app.delete('/api/persons/:id', (request, response) => {
 const makeId = () => {
   let newID
   do {
-    newId = Math.floor(Math.random() * 15) + 1
-  } while (persons.some(person => person.id === newId))
+    newID = Math.floor(Math.random() * 15) 
+  } while (persons.some(person => person.id === newID))
   return newID
 }
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if(!body.name){
+  if (!body.name || !body.number) {
     return response.status(400).json({
-      error: 'content missing'
+      error: 'name or number is missing'
     })
   }
 
   const person = {
     name: body.name,
     number: body.number,
-    id: makeId(),
+    id: makeId()
   }
 
   persons = persons.concat(person)
