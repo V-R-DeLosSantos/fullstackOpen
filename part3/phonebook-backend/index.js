@@ -2,6 +2,17 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 
+app.use(express.json())
+
+morgan.token('post-data', (req) => {
+  if (req.method === 'POST' && req.body) {
+    return `{ name: '${req.body.name}', number: '${req.body.number}'${req.body.id ? `, id: ${req.body.id}` : ''} }`
+  }
+  return ''
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-data'))
+
 let persons = [
     { 
       "id": 1,
