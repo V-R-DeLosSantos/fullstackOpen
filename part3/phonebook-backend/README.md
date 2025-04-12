@@ -4,8 +4,7 @@ This is a backend service for a phonebook application built with Node.js and Exp
 
 ## Live Demo
 
-The application is deployed on Fly.io:
-[Phonebook Backend](https://phonebook-backend-valentino.fly.dev)
+The application is deployed on Fly.io: https://phonebook-backend-valentino.fly.dev
 
 ## Features
 
