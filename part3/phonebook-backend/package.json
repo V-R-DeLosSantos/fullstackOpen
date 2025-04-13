@@ -6,7 +6,10 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "cd C:\\CODIGOS\\fullstackOpen\\part2\\phonebook && npm run build && rd /s /q C:\\CODIGOS\\fullstackOpen\\part3\\phonebook-backend\\dist && xcopy /E /I C:\\CODIGOS\\fullstackOpen\\part2\\phonebook\\dist C:\\CODIGOS\\fullstackOpen\\part3\\phonebook-backend\\dist && cd C:\\CODIGOS\\fullstackOpen\\part3\\phonebook-backend"
+    "build:ui": "cd C:\\CODIGOS\\fullstackOpen\\part2\\phonebook && npm run build && rd /s /q C:\\CODIGOS\\fullstackOpen\\part3\\phonebook-backend\\dist && xcopy /E /I C:\\CODIGOS\\fullstackOpen\\part2\\phonebook\\dist C:\\CODIGOS\\fullstackOpen\\part3\\phonebook-backend\\dist && cd C:\\CODIGOS\\fullstackOpen\\part3\\phonebook-backend",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",    
+    "logs:prod": "fly logs"
   },
   "author": "",
   "license": "ISC",
