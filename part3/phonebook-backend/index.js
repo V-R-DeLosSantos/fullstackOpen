@@ -5,8 +5,6 @@ const cors = require('cors')
 
 app.use(cors())
 
-app.use(express.json())
-
 morgan.token('post-data', (req) => {
   if (req.method === 'POST' && req.body) {
     return `{ name: '${req.body.name}', number: '${req.body.number}'${req.body.id ? `, id: ${req.body.id}` : ''} }`
@@ -42,6 +40,8 @@ let persons = [
 app.use(morgan('tiny'))
 
 app.use(express.json())
+
+app.use(express.static('dist'))
 
 app.get('/', (request, response) => {
     response.send('<h1>it should work</h1>')
