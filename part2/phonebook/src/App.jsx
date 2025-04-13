@@ -43,7 +43,7 @@ const App = () => {
           .catch(error => {
             setMessage(`Error: ${error.response.data.error || 'Failed to update person'}`)
             setTimeout(() => setMessage(null), 5000)
-            setPersons(persons.filter(n => existingPerson.id !== id))
+            setPersons(persons.filter(n => n.id !== existingPerson.id))
           })
       }
       return
@@ -103,7 +103,7 @@ const App = () => {
   }
 
   const personsToShow = persons.filter(person =>
-    person.name.toLowerCase().includes(searchTerm.toLowerCase())
+    person.name?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -112,7 +112,7 @@ const App = () => {
         <h2>Phonebook</h2>
         <Search searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
         <h3>add a new</h3>
-        <Notification message={message} isError={message.includes('Error')} />
+        <Notification message={message} isError={message?.includes('Error')} />
         <PersonForm 
           newName={newName} 
           newNumber={newNumber} 
