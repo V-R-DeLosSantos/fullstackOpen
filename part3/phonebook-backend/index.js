@@ -12,14 +12,22 @@ morgan.token('post-data', (req) => {
   return ''
 })
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'ID mal formateado' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+
+  next(error)
+}
+
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-data'))
 
-let persons = []
-
 app.use(morgan('tiny'))
-
 app.use(express.json())
-
 app.use(express.static('dist'))
 
 app.get('/', (request, response) => {
@@ -49,20 +57,17 @@ app.get('/api/persons/:id', (request, response) => {
   })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-  console.log('success')
-  response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then((result) => {
+      if (result) {
+        response.status(204).end()
+      } else {
+        response.status(404).json({ error: 'person not found' })
+      }
+    })
+    .catch(error => next(error))
 })
-
-/*const makeId = () => {
-  let newID
-  do {
-    newID = Math.floor(Math.random() * 15) 
-  } while (persons.some(person => person.id === newID))
-  return newID
-}*/
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -80,6 +85,13 @@ app.post('/api/persons', (request, response) => {
     response.json(savedPerson)
   })
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT 
 app.listen(PORT, () => {
