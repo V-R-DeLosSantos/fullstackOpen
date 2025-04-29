@@ -34,27 +34,30 @@ app.get('/', (request, response) => {
     response.send('<h1>it should work</h1>')
 })
 
-app.get('/info', (request, response) => {
-  const total = persons.length
-  const today = new Date()
-  const todayString = today.toLocaleString()
+app.get('/info', (request, response, next) => {
+  Person.countDocuments({})
+    .then(count => {
+      const today = new Date()
+      const todayString = today.toLocaleString()
 
-  response.send(`
-    <p>Phonebook has info for ${total} people</p>
-    <p>${todayString}</p>
-    `)
-})
-
-app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons => {
-        response.json(persons)
+      response.send(`
+        <p>Phonebook has info for ${count} people</p>
+        <p>${todayString}</p>
+      `)
     })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then(person => {
-    response.json(person)
-  })
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).json({ error: 'person not found' })
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -74,7 +77,7 @@ app.put('/api/persons/:id', (request, response, next) => {
       if (updatedPerson) {
         response.json(updatedPerson)
       } else {
-        response.status(404).json({ error: 'persona no encontrada' })
+        response.status(404).json({ error: 'person not found' })
       }
     })
     .catch(error => next(error))
