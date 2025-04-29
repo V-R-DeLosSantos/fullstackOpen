@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const Person = require('./models/person')
+const { errorHandler, unknownEndpoint } = require('./middleware/errorHandler')
 
 const app = express()
 
@@ -85,10 +86,6 @@ app.post('/api/persons', (request, response) => {
     response.json(savedPerson)
   })
 })
-
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
