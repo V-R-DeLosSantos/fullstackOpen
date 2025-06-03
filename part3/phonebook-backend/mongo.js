@@ -15,7 +15,12 @@ mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    unique: true,
+    minlength: 3,
+    required: true
+  },
   number: String,
 })
 
